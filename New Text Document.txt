@@ -1,0 +1,58 @@
+
+
+
+
+---------- Query 2 --------------
+
+match (e:Employee)
+with e.reportsTo as empID, count(*) as num
+where num>=3
+return empID,num
+
+---------- Query 3--------------
+
+MATCH (x:Employee)-[:managed_by]->(y:Employee)-[:managed_by]->(z:Employee)
+WHERE not exists((x)-[:managed_by]->(z))
+CREATE (x)-[:managed_by]->(z)
+
+---------- query 4 --------------
+
+select  Count(CustomerID), EmployeeID from Orders
+group by EmployeeID having COUNT(CustomerID) >= 100
+
+
+(sypher)
+
+match(o:Order) with count(o.customerID) as num,o.employeeID as empID
+where num>=100
+return num, empID
+
+
+---------- Query 5 --------------
+
+==> SQL 
+select count(CategoryID) as num from Products  group by(CategoryID) order by num DESC
+
+
+(sypher)
+
+match(p:Product)
+with count(p.categoryID) as num, p.categoryID as catID
+return num,catID
+order by num desc
+limit 3
+
+
+---------- Query 6 --------------
+
+select  EmployeeID , CustomerID
+from Orders
+group by CustomerID, EmployeeID
+order by EmployeeID
+
+
+(sypher)
+
+match (o:Order)
+RETURN o.employeeID,o.customerID
+order by o.employeeID
